@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<title>登録</title>
+
+	<!-- 公共header内钩子 -->
+	<style type="text/css">
+		@media only screen and (min-width:640px) {
+			.plugins-homemiddleadv-home-adv ul.am-gallery img {
+				-webkit-transition: transform .3s ease-in;
+				-moz-transition: transform .3s ease-in;
+				-ms-transition: transform .3s ease-in;
+				-o-transition: transform .3s ease-in;
+				transition: transform .3s ease-in;
+			}
+
+			.plugins-homemiddleadv-home-adv ul.am-gallery img:hover {
+				-ms-transform: translate3d(0px, -3px, 0px);
+				-webkit-transform: translate3d(0px, -3px, 0px);
+				-o-transform: translate3d(0px, -3px, 0px);
+				transform: translate3d(0px, -3px, 0px);
+			}
+		}
+
+		@media only screen and (min-width:1025px) {
+			.plugins-homemiddleadv-home-adv {
+				overflow: hidden;
+			}
+
+			.plugins-homemiddleadv-home-adv ul.am-gallery {
+				width: calc(100% + 20px);
+				margin-left: -10px;
+				margin-top: 10px;
+			}
+		}
+	</style>
+	<style type="text/css">
+		#plugins-commongobacktop {
+			display: none;
+			position: fixed;
+			right: 50px;
+			bottom: 100px;
+			z-index: 100;
+			cursor: pointer;
+		}
+	</style>
+	<style type="text/css">
+		#plugins-expressforkdn-popup p {
+			font-size: 16px;
+			color: #FF9800;
+			font-weight: 500;
+			padding: 1rem;
+			text-align: center;
+			margin: 0;
+		}
+
+		#plugins-expressforkdn-popup .am-list-static>li {
+			padding: .8rem 1rem;
+		}
+
+		#plugins-expressforkdn-popup .am-popup-bd {
+			padding: 0;
+		}
+
+		#plugins-expressforkdn-popup .am-list>li {
+			border: 1px dashed #dedede;
+			border-width: 1px 0;
+		}
+	</style>
+	<style type="text/css">
+		.plugins-touristbuy-nav-top {
+			color: #FF5722;
+		}
+	</style>
+	<link href="../css/ueditor.css" type="text/css" rel="stylesheet">
+	<script src="../js/ZeroClipboard.js.ダウンロード" type="text/javascript" defer="defer"></script>
+</head>
+
+
+<body style="position: static; padding-top: 0px;">
+	<!--  top-->
+	<header th:insert="~{indextmp::top}"></header>
+	<div th:insert="~{indextmp::search}"></div>
+	<header th:insert="~{indextmp::header}"></header>
+
+	<!--  side-->
+
+	<!-- 内容ここから -->
+
+
+	<!-- conntent start  -->
+	<div class="am-g my-content" style="background-color: #FAFAFA;">
+		<div class="am-container user-login-container">
+			<div class="am-hide-sm-only am-u-md-6 am-u-lg-8 am-vertical-align am-text-center container-left">
+				<a href="/shopping" target="_blank"> <img src="../img/IMG_9686.JPG" class="am-vertical-align-middle"
+						alt="用户登录">
+				</a>
+			</div>
+			<div class="am-u-sm-12 am-u-md-6 am-u-lg-4 container-right">
+				<div class="login-top">
+					<span class="">アカウント持っている?</span> <a href="/login"
+						class="am-btn am-btn-secondary am-btn-xs am-radius">ログイン</a>
+
+					<!-- 用户登录页面顶部钩子 -->
+
+				</div>
+				<div class="user-form-container">
+					<div data-am-widget="tabs" class="am-tabs am-tabs-d2 am-margin-0 am-no-layout"
+						data-am-tabs="{noSwipe: 1}">
+						<ul class="am-tabs-nav am-cf">
+							<li class="am-active"><a href="#">アカウント作成</a></li>
+
+						</ul>
+						<div class="am-tabs-bd">
+							<div data-tab-panel-0="" class="am-tab-panel am-active">
+								<!-- form start -->
+								<form class="am-form form-validation-username" method="post" th:action="@{/touroku}"
+									novalidate="novalidate">
+									<div class="am-form-group am-form-group-refreshing">
+										<label>医師 ID</label> <input type="text" name="doctorId"
+											placeholder="医師 IDを入力してください" required />
+									</div>
+
+									<div
+										class="am-form-group am-form-group-refreshing business-form-block am-margin-top-xs">
+										<label>パスワード</label>
+										<div class="am-input-group am-input-group-sm">
+											<input type="password" id="password" name="password"
+												class="am-radius" placeholder="パスワードを入力してください" required /> <span
+												class="am-input-group-btn">
+												<button th:onclick="onView()" class="am-btn" type="button">👀</button>
+											</span>
+										</div>
+									</div>
+
+									<div>
+										<p style="color:red;" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+									</div>
+									<div class="am-form-group am-form-group-refreshing am-margin-top-lg">
+
+										<input type="submit"
+											class="am-btn am-btn-primary am-btn-block am-radius am-btn-sm " value="登録">
+									</div>
+								</form>
+								<!-- form end -->
+							</div>
+
+
+
+
+						</div>
+					</div>
+
+					<!-- 用户登录内容页面底部钩子 -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- conntent end  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!-- 内容ここまで -->
+	<div th:insert="~{indextmp::footercust}"></div>
+	<footer th:insert="~{indextmp::footer}"></footer>
+
+
+	<!-- 密码可视化 -->
+	<script>
+		function onView() {
+
+			let pwd = document.getElementById("password")
+			if (pwd.type === "password") {
+				pwd.type = "text"
+			} else {
+				pwd.type = "password"
+			}
+
+		}
+	</script>
+
+
+	<!-- 类库 -->
+	<script type="text/javascript" src="../js/jquery-2.1.0.js.ダウンロード"></script>
+	<script type="text/javascript" src="../js/amazeui.min.js.ダウンロード"></script>
+
+	<!-- 图片放大镜 -->
+	<script type="text/javascript" src="../js/jquery.imagezoom.min.js.ダウンロード"></script>
+
+	<!-- echarts 图表 -->
+	<script type="text/javascript" src="../js/echarts.min.js.ダウンロード"></script>
+	<script type="text/javascript" src="../js/macarons.js.ダウンロード"></script>
+
+	<!-- amazeui插件 -->
+	<script type="text/javascript" src="../js/amazeui.switch.min.js.ダウンロード"></script>
+	<script type="text/javascript" src="../js/amazeui.chosen.min.js.ダウンロード"></script>
+	<script type="text/javascript" src="../js/amazeui.dialog.js.ダウンロード"></script>
+	<script type="text/javascript" src="../js/amazeui.tagsinput.min.js.ダウンロード"></script>
+
+	<!-- 图像裁剪插件 -->
+	<script type="text/javascript" src="../js/cropper.min.js.ダウンロード"></script>
+
+	<!-- 复制插件 -->
+	<script type="text/javascript" src="../js/clipboard.min.js.ダウンロード"></script>
+
+	<!-- 元素拖拽排序插件 -->
+	<script type="text/javascript" src="../js/jquery.dragsort-0.5.2.min.js.ダウンロード"></script>
+
+	<!-- ueditor 编辑器 -->
+	<script type="text/javascript" src="../js/ueditor.config.js.ダウンロード"></script>
+	<script type="text/javascript" src="../js/ueditor.all.js.ダウンロード"></script>
+	<script type="text/javascript" src="../js/zh-cn.js.ダウンロード"></script>
+
+	<!-- 颜色选择器 -->
+	<script type="text/javascript" src="../js/jquery.colorpicker.js.ダウンロード"></script>
+
+
+	<!-- 项目公共 -->
+	<script type="text/javascript" src="../js/common.js.ダウンロード"></script>
+	<script type="text/javascript" src="../js/common.js(1).ダウンロード"></script>
+
+	<!-- 应用插件公共js -->
+
+	<!-- 当前控制器js -->
+	<script type="text/javascript" src="../js/user.js.ダウンロード"></script>
+
+	<!-- 底部信息 -->
+
+	<!-- js钩子 -->
+	<script type="text/javascript" src="../js/style.js.ダウンロード"></script>
+	<script type="text/javascript" src="../js/style.js(1).ダウンロード"></script>
+	<script type="text/javascript" src="../js/style.js(2).ダウンロード"></script>
+	<script type="text/javascript" src="../js/style.js(3).ダウンロード"></script>
+	<script type="text/javascript" src="../js/style.js(4).ダウンロード"></script>
+	<script type="text/javascript" src="../js/style.js(5).ダウンロード"></script>
+
+
+
+</body>
+
+</html>

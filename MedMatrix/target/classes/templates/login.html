@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--CSS-->
+	<link href="../static/css/loginform.css" rel="stylesheet">
+	<title>MedMatrix</title>
+</head>
+
+<body class="layout">
+	<header class="header" id="header">
+		<div class="header-content">
+			<div class="header-content-left">
+				<img src="../static/img/logo.webp" width="112" height="40">
+			</div>
+		</div>
+	</header>
+
+	<!--コンテンツ-->
+	<form action="@{/login}" method="post">
+		<span class="">アカウントまだ持っていない?</span> <a href="/touroku"
+			class="am-btn am-btn-secondary am-btn-xs am-radius">新規登録</a>
+		<div class="imgcontainer">
+			<img src="../static/img/emr.webp" alt="Avatar" class="avatar">
+		</div>
+
+		<div class="container">
+			<label for="doctorId"><b>医師 ID</b></label>
+			<input type="text" placeholder="医師 IDを入力してください" name="doctorId" data-validation-message="医師 IDを入力してください"
+				required>
+
+			<label for="password"><b>パスワード</b></label>
+			<input type="password" placeholder="パスワードを入力してください" name="password" required /> <span
+				class="am-input-group-btn">
+				<button th:onclick="onView()" class="am-btn" type="button">👀</button>
+			</span>
+
+			<button type="submit">ログイン</button>
+			<label>
+				<input type="checkbox" checked="checked" name="remember"> ログイン状態を保存する
+			</label>
+		</div>
+
+		<div class="container" style="background-color:#f1f1f1">
+			<button type="button" class="cancelbtn">キャンセル</button>
+			<span class="password"> <a href="#">パスワードを忘れた場合</a></span>
+		</div>
+	</form>
+	<!-- 密码可视化 -->
+	<script>
+		function onView() {
+
+			let pwd = document.getElementById("password")
+			if (pwd.type === "password") {
+				pwd.type = "text"
+			} else {
+				pwd.type = "password"
+			}
+
+		}
+	</script>
+	</div>
+	<!-- Copyright -->
+	<footer class="footer">
+		<div class="footer-content">
+			<div class="footer-links">
+				<ul class="footer-links-list flex flex-wrap">
+					<li class="link">MedMatrixとは</li>
+					<li class="link">利用ガイド</li>
+					<li class="link">運営会社</li>
+					<li class="link">よくある質問</li>
+					<li class="link"><a href="/contact">お問い合わせ</a></li>
+				</ul>
+			</div>
+
+			<ul class="footer-infos-list flex flex-wrap">
+				<li class="info">MedMatrix©2024 All rights reserved info@MedMatrix.com</li>
+				<li class="info"> <a href="/terms">利用規約</a></li>
+				<li class="info"> <a href="/privacy">プライバシーポリシー</a></li>
+				<li class="info"> <a href="/cookie">Cookieポリシー</a></li>
+				<li class="info"> <a href="/legal">特定商取引法に基づく表記</a></li>
+			</ul>
+		</div>
+		</div>
+		<div class="footer-content-mobile">
+			Copyright MedMatrix Co., Ltd. All rights reserved.
+		</div>
+	</footer>
+
+	<script>
+		$(function () {
+			$(window).scroll(function () {
+				if ($(window).scrollTop() > 400)
+					$('a.to-top-btn').show();
+				else
+					$('a.to-top-btn').hide();
+			});
+
+			$('.filter-list .nav-header-menuitem').on('click', function () {
+				$(this).addClass("active").siblings().removeClass("active");
+			});
+
+		});
+
+	</script>
+
+</body>
+
+</html>
