@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>文書作成フォーム</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f9f9f9;
+			padding: 20px;
+		}
+
+		.container {
+			width: 800px;
+			margin: auto;
+			background-color: #fff;
+			padding: 20px;
+			border: 1px solid #000;
+			border-radius: 5px;
+		}
+
+		.title {
+			text-align: center;
+			font-size: 24px;
+			margin-bottom: 20px;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-bottom: 20px;
+		}
+
+		td,
+		th {
+			padding: 8px;
+			border: 1px solid #000;
+			vertical-align: top;
+		}
+
+		.input-box {
+			width: 100%;
+			padding: 6px;
+			box-sizing: border-box;
+			border: none;
+			background-color: transparent;
+		}
+
+		.large-input-box {
+			width: 100%;
+			height: 40px;
+			padding: 6px;
+			box-sizing: border-box;
+			border: 1px solid #000;
+		}
+
+		.header-section {
+			text-align: left;
+			margin-bottom: 10px;
+		}
+
+		.header-section td {
+			border: none;
+		}
+
+		.age-section {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.signature-section {
+			text-align: right;
+			margin-top: 20px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<h1>文書作成フォーム</h1>
+		<p>患者名: <span th:text="${patient.name}">[患者名]</span></p>
+		<p>患者ID: <span th:text="${patient.patientId}">[患者ID]</span></p>
+		<div>
+			<label for="documentType">文書タイプ:</label>
+			<select id="documentType" name="documentType" class="form-select" onchange="showFormSection()">
+				<option value="">-- 文書を選択してください --</option>
+				<option value="referral">紹介状 (Referral letter)</option>
+				<option value="clinicalFindings">診療所見 (Clinical findings)</option>
+			</select>
+		</div>
+
+		<!-- 紹介状のフォーム部分 -->
+		<div id="referralForm" class="form-section" style="display:none;">
+			<h2>紹介状</h2>
+			<!-- ここに紹介状フォームのフィールドを追加 -->
+			<div class="container">
+				<div class="title">診療情報提供書（患者紹介）</div>
+
+				<table class="header-section">
+					<tr>
+						<td>医療機関</td>
+						<td colspan="3"><input type="text" class="input-box" value="静岡済生会総合病院"></td>
+						<td>平成20年 02月 19日</td>
+					</tr>
+					<tr>
+						<td>担当医</td>
+						<td colspan="4">
+							<p><input type="text" class="input-box" value="山田太郎"></p>
+							<p>所在地: <input type="text" class="input-box" value="静岡県静岡市駿河区小鹿一丁目1番1号"></p>
+							<p>電話番号: <input type="text" class="input-box" value="054-285-6171"></p>
+						</td>
+					</tr>
+					<tr>
+						<td>〒</td>
+						<td colspan="4"><input type="text" class="input-box"></td>
+					</tr>
+					<tr>
+						<td>TEL</td>
+						<td colspan="4"><input type="text" class="input-box"></td>
+					</tr>
+				</table>
+
+				<table>
+					<tr>
+						<td>患者氏名</td>
+						<td colspan="2"><input type="text" class="input-box" th:value="${patient.patientId}"></td>
+						<td>性別</td>
+						<td><input type="text" class="input-box" th:value="${patient.gender}"></td>
+					</tr>
+					<tr>
+						<td>住所</td>
+						<td colspan="4"><input type="text" class="input-box" th:value="${patient.address}"></td>
+					</tr>
+					<tr>
+						<td>電話番号</td>
+						<td colspan="2"><input type="text" class="input-box" th:value="${patient.contactNum}"></td>
+						<td>生年月日</td>
+						<td><input type="text" class="input-box" th:value="${patient.dateOfBirth}"></td>
+					</tr>
+					<tr>
+						<td>傷病名</td>
+						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+					</tr>
+					<tr>
+						<td>紹介目的</td>
+						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+					</tr>
+					<tr>
+						<td>既往歴</td>
+						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+					</tr>
+					<tr>
+						<td>家族歴</td>
+						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+					</tr>
+					<tr>
+						<td>現症（診断内容）</td>
+						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+					</tr>
+					<tr>
+						<td>治療過過</td>
+						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+					</tr>
+					<tr>
+						<td>現在の処方</td>
+						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+					</tr>
+					<tr>
+						<td>身体所見</td>
+						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+					</tr>
+					<tr>
+						<td>生活習慣</td>
+						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+					</tr>
+					<tr>
+						<td>診療内容</td>
+						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+					</tr>
+				</table>
+
+				<div class="signature-section">
+					<p>医師署名: ________________________</p>
+				</div>
+			</div>
+
+
+		</div>
+
+		<!-- 診療所見のフォーム部分 -->
+		<div id="clinicalFindingsForm" class="form-section" style="display:none;">
+			<h2>診療所見</h2>
+			<!-- ここに診療所見フォームのフィールドを追加 -->
+			<div class="container">
+				<div class="title">診療所見</div>
+
+				<table class="header-section">
+					<tr>
+						<td>医療機関</td>
+						<td colspan="3">静岡済生会総合病院</td>
+						<td>平成20年 02月 12日</td>
+					</tr>
+					<tr>
+						<td>担当医</td>
+						<td colspan="4">
+							<p>医師氏名: <span>山田太郎</span></p>
+							<p>所在地: <span>静岡県静岡市駿河区小鹿一丁目1番1号</span></p>
+							<p>電話番号: <span>054-285-6171</span></p>
+						</td>
+					</tr>
+				</table>
+
+				<table>
+					<tr>
+						<td>患者氏名</td>
+						<td colspan="2"><input type="text" class="input-box" th:value="${patient.name}"></td>
+						<td>性別</td>
+						<td><input type="text" class="input-box" th:value="${patient.gender}"></td>
+					</tr>
+					<tr>
+						<td>住所</td>
+						<td colspan="4"><input type="text" class="input-box" th:value="${patient.address}"></td>
+					</tr>
+					<tr>
+						<td>電話番号</td>
+						<td colspan="2"><input type="text" class="input-box" th:value="${patient.contactNum}"></td>
+						<td>生年月日</td>
+						<td><input type="text" class="input-box" th:value="${patient.dateOfBirth}"></td>
+					</tr>
+					<tr>
+						<td>所見日</td>
+						<td colspan="4"><input type="date" class="input-box" value="2008-02-12"></td>
+					</tr>
+					<tr>
+						<td>Subjective</td>
+						<td colspan="4"><textarea class="large-input-box"></textarea></td>
+					</tr>
+					<tr>
+						<td>Objective</td>
+						<td colspan="4"><textarea class="large-input-box"></textarea></td>
+					</tr>
+					<tr>
+						<td>Assessment</td>
+						<td colspan="4"><textarea class="large-input-box"></textarea></td>
+					</tr>
+					<tr>
+						<td>Plan</td>
+						<td colspan="4"><textarea class="large-input-box"></textarea></td>
+					</tr>
+				</table>
+				<div class="signature-section">
+					<p>医師署名: ________________________</p>
+				</div>
+
+			</div>
+		</div>
+
+		<button type="submit">送信</button>
+	</div>
+
+	<script>
+		function showFormSection() {
+			// すべてのフォーム部分を隠す
+			document.getElementById('referralForm').style.display = 'none';
+			document.getElementById('clinicalFindingsForm').style.display = 'none';
+
+			// ユーザーの選択に基づいてフォーム部分を表示
+			var selectedType = document.getElementById('documentType').value;
+			if (selectedType === 'referral') {
+				document.getElementById('referralForm').style.display = 'block';
+			} else if (selectedType === 'clinicalFindings') {
+				document.getElementById('clinicalFindingsForm').style.display = 'block';
+			}
+		}
+	</script>
+</body>
+
+</html>
