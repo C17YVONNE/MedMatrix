@@ -101,32 +101,50 @@
 
 				<table class="header-section">
 					<tr>
-						<td>医療機関</td>
-						<td colspan="3"><input type="text" class="input-box" value="静岡済生会総合病院"></td>
-						<td>平成20年 02月 19日</td>
-					</tr>
-					<tr>
-						<td>担当医</td>
-						<td colspan="4">
-							<p><input type="text" class="input-box" value="山田太郎"></p>
-							<p>所在地: <input type="text" class="input-box" value="静岡県静岡市駿河区小鹿一丁目1番1号"></p>
-							<p>電話番号: <input type="text" class="input-box" value="054-285-6171"></p>
+						<!-- Left section for Referred Medical Institution -->
+						<td style="vertical-align: top; padding-right: 20px;">
+							<label for="referralHospitalSelect">紹介先医療機関:</label>
+							<select id="referralHospitalSelect" name="hospital" onchange="loadDepartments('referral')">
+								<!-- Populate this dropdown with hospital names from your database -->
+								<option value="">--選択してください--</option>
+								<th:block th:each="hospital : ${hospitals}">
+									<option th:value="${hospital.hospitalId}" th:text="${hospital.hospitalName}">
+									</option>
+								</th:block>
+							</select>
+							<br>
+							<label for="referralDepartmentSelect">診療科:</label>
+							<select id="referralDepartmentSelect" name="department">
+								<!-- Populate this dropdown with department names based on the selected hospital -->
+								<option value="">--選択してください--</option>
+							</select>
+							<br>
+							<label for="	referralDoctorName">担当医師名:</label>
+							<input type="text" id="referralDoctorName" name="doctorName" value="[担当医師名]">
+						</td>
+
+						<!-- Right section for Introducing Medical Institution -->
+						<td style="vertical-align: top;">
+							<p>紹介日: <span id="introductionDate"></span></p>
+							<p>紹介元医療機関: <span>済生会小樽病院</span></p>
+							<p>医師氏名: <span>桃太郎</span></p>
+							<p>所在地: <span>〒047-0008 北海道小樽市築港10番1</span></p>
+							<p>電話番号: <span>0134-25-4321</span></p>
 						</td>
 					</tr>
-					<tr>
-						<td>〒</td>
-						<td colspan="4"><input type="text" class="input-box"></td>
-					</tr>
-					<tr>
-						<td>TEL</td>
-						<td colspan="4"><input type="text" class="input-box"></td>
-					</tr>
 				</table>
+				<!--	<p>紹介元医療機関名: <span th:text="${doctor.hospital.name}">[紹介元医療機関名]</span></p>-->
+				<!--	<p>郵便番号: <span th:text="${doctor.hospital.postalCode}">[郵便番号]</span></p>-->
+				<!--	<p>住所: <span th:text="${doctor.hospital.address}">[住所]</span></p>-->
+				<!--	<p>電話番号: <span th:text="${doctor.hospital.phone}">[電話番号]</span></p>-->
+				<!--	<p>診療科目: <span th:text="${doctor.department}">[診療科目]</span></p>-->
+				<!--	<p>医師名: <span th:text="${doctor.name}">[医師名]</span></p>-->
+
 
 				<table>
 					<tr>
 						<td>患者氏名</td>
-						<td colspan="2"><input type="text" class="input-box" th:value="${patient.patientId}"></td>
+						<td colspan="2"><input type="text" class="input-box" th:value="${patient.name}"></td>
 						<td>性別</td>
 						<td><input type="text" class="input-box" th:value="${patient.gender}"></td>
 					</tr>
@@ -181,10 +199,6 @@
 						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
 					</tr>
 				</table>
-
-				<div class="signature-section">
-					<p>医師署名: ________________________</p>
-				</div>
 			</div>
 
 
@@ -198,17 +212,35 @@
 				<div class="title">診療所見</div>
 
 				<table class="header-section">
-					<tr>
-						<td>医療機関</td>
-						<td colspan="3">静岡済生会総合病院</td>
-						<td>平成20年 02月 12日</td>
-					</tr>
-					<tr>
-						<td>担当医</td>
-						<td colspan="4">
-							<p>医師氏名: <span>山田太郎</span></p>
-							<p>所在地: <span>静岡県静岡市駿河区小鹿一丁目1番1号</span></p>
-							<p>電話番号: <span>054-285-6171</span></p>
+					<tr> <!-- Left section for Referred Medical Institution -->
+						<td style="vertical-align: top; padding-right: 20px;">
+							<label for="clinicalHospitalSelect">紹介先医療機関:</label>
+							<select id="clinicalHospitalSelect" name="hospital" onchange="loadDepartments('clinical')">
+								<!-- Populate this dropdown with hospital names from your database -->
+								<option value="">--選択してください--</option>
+								<th:block th:each="hospital : ${hospitals}">
+									<option th:value="${hospital.hospitalId}" th:text="${hospital.hospitalName}">
+									</option>
+								</th:block>
+							</select>
+							<br>
+							<label for="clinicalDepartmentSelect">診療科:</label>
+							<select id="clinicalDepartmentSelect" name="department">
+								<!-- Populate this dropdown with department names based on the selected hospital -->
+								<option value="">--選択してください--</option>
+							</select>
+							<br>
+							<label for="clinicalDoctorName">担当医師名:</label>
+							<input type="text" id="clinicalDoctorName" name="doctorName" value="[担当医師名]">
+						</td>
+
+						<!-- Right section for Introducing Medical Institution -->
+						<td style="vertical-align: top;">
+							<p>紹介日: <span id="introductionDate"></span></p>
+							<p>紹介元医療機関: <span>済生会小樽病院</span></p>
+							<p>医師氏名: <span>桃太郎</span></p>
+							<p>所在地: <span>〒047-0008 北海道小樽市築港10番1</span></p>
+							<p>電話番号: <span>0134-25-4321</span></p>
 						</td>
 					</tr>
 				</table>
@@ -251,9 +283,6 @@
 						<td colspan="4"><textarea class="large-input-box"></textarea></td>
 					</tr>
 				</table>
-				<div class="signature-section">
-					<p>医師署名: ________________________</p>
-				</div>
 
 			</div>
 		</div>
@@ -275,6 +304,33 @@
 				document.getElementById('clinicalFindingsForm').style.display = 'block';
 			}
 		}
+
+		function loadDepartments(formType) {
+			var hospitalSelectId = formType === 'referral' ? 'referralHospitalSelect' : 'clinicalHospitalSelect';
+			var departmentSelectId = formType === 'referral' ? 'referralDepartmentSelect' : 'clinicalDepartmentSelect';
+
+			var hospitalId = document.getElementById(hospitalSelectId).value;
+			var departmentSelect = document.getElementById(departmentSelectId);
+			departmentSelect.innerHTML = '<option value="">-- 選択してください --</option>';
+
+			if (hospitalId) {
+				fetch('/departments?hospitalId=' + hospitalId)
+					.then(response => response.json())
+					.then(data => {
+						data.forEach(function (department) {
+							var option = document.createElement('option');
+							option.value = department.departmentId;
+							option.text = department.departmentName;
+							departmentSelect.add(option);
+						});
+					});
+			}
+		}
+
+
+		// Automatically set the current date
+		document.getElementById('introductionDate').innerText = new Date().toLocaleDateString();
+
 	</script>
 </body>
 
