@@ -13,6 +13,8 @@ import com.emrsys.medmatrix.repository.DepartmentRepository;
 import com.emrsys.medmatrix.repository.HospitalRepository;
 import com.emrsys.medmatrix.util.EntityToObjectUtil;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class HospitalInfoService {
 
@@ -31,4 +33,17 @@ public class HospitalInfoService {
 		List<DepartmentEntity> DepartEntityList= departmentRepository.findByHospitalEntityHospitalId(hospitalId);
 		return EntityToObjectUtil.convertEntityListToDtoList(DepartEntityList, DepartmentDto.class);
 	}
+	
+	@Transactional
+	public void addHospitalInfo(String hospitalName, String postcode, String address, String number) {
+		
+		HospitalEntity entity = new HospitalEntity();
+		entity.setHospitalName(hospitalName);
+		entity.setPostcode(postcode);
+		entity.setAddress(address);
+		entity.setNumber(number);
+		
+		hospitalRepository.save(entity);
+	}
+	
 }
