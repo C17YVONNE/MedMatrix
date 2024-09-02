@@ -1,14 +1,14 @@
 package com.emrsys.medmatrix.controller;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.emrsys.medmatrix.entity.UserLoginEntity;
 import com.emrsys.medmatrix.object.UserLoginDto;
 import com.emrsys.medmatrix.service.UserLoginService;
 import com.emrsys.medmatrix.util.MsgContents;
@@ -27,7 +27,7 @@ public class UserLoginController {
 	 * @return
 	 */
 	@GetMapping(Url.LOGIN)
-	public ModelAndView login() {
+	public ModelAndView showLoginForm() {
 		ModelAndView mv = new ModelAndView("login");
 		return mv;
 	}
@@ -38,30 +38,25 @@ public class UserLoginController {
 	 * @return
 	 */
 	@PostMapping(Url.LOGIN)
-	public String userLogin(UserLoginDto user, Map<String, Object> map, HttpSession session) {
+	public String Login(UserLoginDto userLoginDto, HttpSession httpSession, Model model) {
+		String rawPassword = userLoginDto.getPassword();
+		int doctorId = userLoginDto.getDoctorId();
+		
+		// 获取数据库中存储的加密密码
+		UserLoginEntity userLogin = userLoginService.getUserLoginByDoctorId(doctorId);
+		String storedEnncodedPassword = userLogin.getPassword();
+	
 
-		int status = userLoginService.getStatus(user.getDoctorId());
-		Session sessionDto = new Session();
-		sessionDto.setDoctorId(user.getDoctorId());
-		sessionDto.setUrole(userLoginService.getUrole(user.getDoctorId()));
-		sessionDto.setStatus(status);
-
-		if (status == 1) {
-			String idPsCheck = userLoginService.loginProcess(user);
-			//医師IDとパスワードがDBのと一致しない場合
-			if (idPsCheck.equals(MsgContents.CHECKFALSE)) {
-				//エラーメッセージ提示
-				map.put("idpscheck", MsgContents.LOGINFAILUER);
-				return "login";
-			} else {
-				//ログイン成功 ホームページへ
-
-				session.setAttribute("userLogin", sessionDto);
-
-				return "redirect:/home";
-			}
+		// 验证密码是否匹配
+		if (userLoginService.checkPassword(rawPassword, storedEnncodedPassword)) {
+			// 如果匹配，设置登录会话信息
+			Session session = userLoginService.getLoginSession(doctorId);
+			httpSession.setAttribute("session", session);// 将Session对象放入HttpSession中
+			System.out.println(session);
+			System.out.println("/n");
+			return "redirect:/home";
 		} else {
-			map.put("statusCheck", MsgContents.STATUSCHECK);
+			model.addAttribute("error", MsgContents.LOGINFAILUER);
 			return "login";
 		}
 	}
