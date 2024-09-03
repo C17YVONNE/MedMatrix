@@ -5,15 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.emrsys.medmatrix.entity.UserLoginEntity;
 import com.emrsys.medmatrix.object.UserLoginDto;
 import com.emrsys.medmatrix.service.UserLoginService;
 import com.emrsys.medmatrix.util.MsgContents;
-import com.emrsys.medmatrix.util.Session;
 import com.emrsys.medmatrix.util.Url;
+import com.emrsys.medmatrix.util.UserInfoSession;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -50,27 +49,12 @@ public class UserLoginController {
 		// 验证密码是否匹配
 		if (userLoginService.checkPassword(rawPassword, storedEnncodedPassword)) {
 			// 如果匹配，设置登录会话信息
-			Session session = userLoginService.getLoginSession(doctorId);
-			httpSession.setAttribute("session", session);// 将Session对象放入HttpSession中
-			System.out.println(session);
-			System.out.println("/n");
+			UserInfoSession userInfoSession = userLoginService.getLoginSession(doctorId);
+			httpSession.setAttribute("session", userInfoSession);// 将Session对象放入HttpSession中
 			return "redirect:/home";
 		} else {
 			model.addAttribute("error", MsgContents.LOGINFAILUER);
 			return "login";
 		}
-	}
-
-	/**
-	 * ログアウト 
-	 * 
-	 */
-	@RequestMapping(Url.LOGINOUT)
-	public String loginout(HttpSession session) {
-
-		session.removeAttribute("userLogin");
-
-		return "redirect:/home";
-
 	}
 }
