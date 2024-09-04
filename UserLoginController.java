@@ -12,12 +12,9 @@ import com.emrsys.medmatrix.object.UserLoginDto;
 import com.emrsys.medmatrix.service.UserLoginService;
 import com.emrsys.medmatrix.util.MsgContents;
 import com.emrsys.medmatrix.util.Url;
-import com.emrsys.medmatrix.util.UserInfoSession;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
-public class UserLoginController {
+public class UserLoginController extends BasePageController {
 	@Autowired
 	UserLoginService userLoginService;
 
@@ -37,24 +34,25 @@ public class UserLoginController {
 	 * @return
 	 */
 	@PostMapping(Url.LOGIN)
-	public String Login(UserLoginDto userLoginDto, HttpSession httpSession, Model model) {
+	public ModelAndView login(UserLoginDto userLoginDto, Model model) {
 		String rawPassword = userLoginDto.getPassword();
 		int doctorId = userLoginDto.getDoctorId();
-		
+
 		// 获取数据库中存储的加密密码
 		UserLoginEntity userLogin = userLoginService.getUserLoginByDoctorId(doctorId);
 		String storedEnncodedPassword = userLogin.getPassword();
-	
 
 		// 验证密码是否匹配
 		if (userLoginService.checkPassword(rawPassword, storedEnncodedPassword)) {
 			// 如果匹配，设置登录会话信息
-			UserInfoSession userInfoSession = userLoginService.getLoginSession(doctorId);
-			httpSession.setAttribute("session", userInfoSession);// 将Session对象放入HttpSession中
-			return "redirect:/home";
+			//			UserInfoSession userInfoSession = userLoginService.getLoginSession(doctorId);
+			//			httpSession.setAttribute("session", userInfoSession);// 将Session对象放入HttpSession中
+			return createMav("home");
 		} else {
+
+			ModelAndView mav = new ModelAndView("login");
 			model.addAttribute("error", MsgContents.LOGINFAILUER);
-			return "login";
+			return mav;
 		}
 	}
 }

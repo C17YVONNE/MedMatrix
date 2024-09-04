@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+</head>
+
+<body>
+	<!-- 共通 Header -->
+	<header class="header" id="header">
+		<div class="header-content">
+			<div class="header-left">
+				<span>MedMatrix電子カルテシステム メイン画面</span>
+			</div>
+			<div class="header-right">
+				<span><span th:text="${userInfoSession.hospitalName}"></span></span>
+				<span><span th:text="${userInfoSession.doctorId}"></span></span>
+				<span><span th:text="${userInfoSession.name}"></span></span>
+				<span><span th:text="${userInfoSession.urole}"></span></span> <!-- 显示角色 -->
+				<span><span th:text="${#dates.format(new java.util.Date(), 'yyyy-MM-dd HH:mm:ss')}"></span></span>
+			</div>
+			<div class="header-btn">
+				<a href="/logout">ログアウト</a>
+			</div>
+		</div>
+		<nav>
+			<ul>
+				<li><a href="#"></a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<!-- 动态页面内容 -->
+	<div>
+		<div th:replace="~{pages/${Page}}"></div>
+	</div>
+
+	<!-- 共通 Footer -->
+	<footer>
+		<p>Copyright© Since 2024 MedMatrix Corporation All rights reserved.</p>
+		<p>当社は患者様のプライバシーを保護し、国際的なデータセキュリティ基準に準拠することをお約束します。</p>
+		<p>
+			<a href="/privacy-policy">プライバシーポリシー</a> |
+			<a href="/terms-of-use">利用規約</a> |
+			<a href="/help-center">ヘルプセンター</a>
+		</p>
+		<p>システムバージョン: v2.1.0</p>
+		<p>技術サポート: <a href="mailto:support@medmatrix.com">support@medmatrix.com</a></p>
+	</footer>
+</body>
+
+</html>
