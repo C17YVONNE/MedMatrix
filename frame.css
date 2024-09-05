@@ -1,0 +1,131 @@
+@charset "UTF-8";
+
+/* 全局样式 */
+html,
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+div.content {
+	flex: 1;
+	padding: 20px;
+}
+
+/* Header 样式 */
+.header {
+	background-color: #003366;
+	/* 深蓝色背景，显得稳重 */
+	color: #fff;
+	/* 白色字体 */
+	padding: 20px;
+}
+
+.header-content {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	max-width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.header-left {
+	font-size: 24px;
+	font-weight: bold;
+	margin-left: 0;
+	padding-left: 0;
+	margin-right: 15vw;
+}
+
+.header-right {
+	display: flex;
+	align-items: center;
+	gap: 30px;
+}
+
+.header-right span {
+	font-size: 14px;
+	color: #f0f0f0;
+}
+
+.header-btn {
+	margin-left: auto;
+}
+
+.header-btn a {
+	padding: 5px 15px;
+	background-color: #003366;
+	/* 初始背景为深蓝色 */
+	color: #fff;
+	/* 白色字体 */
+	text-decoration: none;
+	border-radius: 5px;
+	transition: background-color 0.3s ease, color 0.3s ease;
+	border: 1px solid #cccccc;
+	font-size: 12px;
+}
+
+.header-btn a:hover {
+	background-color: #BCC6CC ;
+	color: #fff;
+}
+
+/* Footer 样式 */
+footer {
+	background-color: #003366;
+	color: #fff;
+	padding: 20px 10px;
+	text-align: center;
+	font-size: 14px;
+	flex-shrink: 0;
+}
+
+footer p {
+	margin: 5px 0;
+	color: #f0f0f0;
+}
+
+footer a {
+	color: #f0f0f0;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+footer a:hover {
+	color: #1e90ff;
+}
+
+footer p a {
+	margin: 0 5px;
+}
+
+footer p {
+	display: inline-block;
+	margin-right: 15px;
+}
+
+footer .support-link {
+	margin-top: 0px;
+	font-weight: normal;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+	.header-content {
+		flex-direction: column;
+		text-align: center;
+	}
+
+	.header-right {
+		margin-top: 10px;
+	}
+}
