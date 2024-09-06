@@ -5,77 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>文書作成フォーム</title>
-	<style>
-		body {
-			font-family: Arial, sans-serif;
-			background-color: #f9f9f9;
-			padding: 20px;
-		}
-
-		.container {
-			width: 800px;
-			margin: auto;
-			background-color: #fff;
-			padding: 20px;
-			border: 1px solid #000;
-			border-radius: 5px;
-		}
-
-		.title {
-			text-align: center;
-			font-size: 24px;
-			margin-bottom: 20px;
-		}
-
-		table {
-			width: 100%;
-			border-collapse: collapse;
-			margin-bottom: 20px;
-		}
-
-		td,
-		th {
-			padding: 8px;
-			border: 1px solid #000;
-			vertical-align: top;
-		}
-
-		.input-box {
-			width: 100%;
-			padding: 6px;
-			box-sizing: border-box;
-			border: none;
-			background-color: transparent;
-		}
-
-		.large-input-box {
-			width: 100%;
-			height: 40px;
-			padding: 6px;
-			box-sizing: border-box;
-			border: 1px solid #000;
-		}
-
-		.header-section {
-			text-align: left;
-			margin-bottom: 10px;
-		}
-
-		.header-section td {
-			border: none;
-		}
-
-		.age-section {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-		}
-
-		.signature-section {
-			text-align: right;
-			margin-top: 20px;
-		}
-	</style>
+	<link rel="stylesheet" href="css/documentForm.css">
 </head>
 
 <body>
@@ -91,7 +21,6 @@
 				<option value="clinicalFindings">診療所見 (Clinical findings)</option>
 			</select>
 		</div>
-
 		<!-- 紹介状のフォーム部分 -->
 		<div id="referralForm" class="form-section" style="display:none;">
 			<h2>紹介状</h2>
@@ -125,21 +54,15 @@
 
 						<!-- Right section for Introducing Medical Institution -->
 						<td style="vertical-align: top;">
-							<p>紹介日: <span id="introductionDate"></span></p>
-							<p>紹介元医療機関: <span>済生会小樽病院</span></p>
-							<p>医師氏名: <span>桃太郎</span></p>
-							<p>所在地: <span>〒047-0008 北海道小樽市築港10番1</span></p>
-							<p>電話番号: <span>0134-25-4321</span></p>
+							<p>紹介日: <span
+									th:text="${#dates.format(new java.util.Date(), 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+							<p>紹介元医療機関: <span th:text="${userInfoSession.hospitalName}"></span></p>
+							<p>医師氏名: <span th:text="${userInfoSession.name}"></span></p>
+							<p>所在地: 〒<span th:text="${userInfoSession.postcode}+${userInfoSession.address}"></span></p>
+							<p>電話番号: <span th:text="${userInfoSession.number}"></span></p>
 						</td>
 					</tr>
 				</table>
-				<!--	<p>紹介元医療機関名: <span th:text="${doctor.hospital.name}">[紹介元医療機関名]</span></p>-->
-				<!--	<p>郵便番号: <span th:text="${doctor.hospital.postalCode}">[郵便番号]</span></p>-->
-				<!--	<p>住所: <span th:text="${doctor.hospital.address}">[住所]</span></p>-->
-				<!--	<p>電話番号: <span th:text="${doctor.hospital.phone}">[電話番号]</span></p>-->
-				<!--	<p>診療科目: <span th:text="${doctor.department}">[診療科目]</span></p>-->
-				<!--	<p>医師名: <span th:text="${doctor.name}">[医師名]</span></p>-->
-
 
 				<table>
 					<tr>
@@ -200,8 +123,7 @@
 					</tr>
 				</table>
 			</div>
-
-
+			<button type="submit">紹介状を保存</button>
 		</div>
 
 		<!-- 診療所見のフォーム部分 -->
@@ -236,11 +158,12 @@
 
 						<!-- Right section for Introducing Medical Institution -->
 						<td style="vertical-align: top;">
-							<p>紹介日: <span id="introductionDate"></span></p>
-							<p>紹介元医療機関: <span>済生会小樽病院</span></p>
-							<p>医師氏名: <span>桃太郎</span></p>
-							<p>所在地: <span>〒047-0008 北海道小樽市築港10番1</span></p>
-							<p>電話番号: <span>0134-25-4321</span></p>
+							<p>紹介日: <span
+									th:text="${#dates.format(new java.util.Date(), 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+							<p>紹介元医療機関: <span th:text="${userInfoSession.hospitalName}"></span></p>
+							<p>医師氏名: <span th:text="${userInfoSession.name}"></span></p>
+							<p>所在地: 〒<span th:text="${userInfoSession.postcode}+	${userInfoSession.address}"></span></p>
+							<p>電話番号: <span th:text="${userInfoSession.number}"></span></p>
 						</td>
 					</tr>
 				</table>
@@ -264,7 +187,8 @@
 					</tr>
 					<tr>
 						<td>所見日</td>
-						<td colspan="4"><input type="date" class="input-box" value="2008-02-12"></td>
+						<td colspan="4"><input type="date" class="input-box"
+								th:value="${#dates.format(new java.util.Date())}"></td>
 					</tr>
 					<tr>
 						<td>Subjective</td>
@@ -285,12 +209,14 @@
 				</table>
 
 			</div>
-		</div>
+			<button type="submit">診療所見を保存</button>
 
-		<button type="submit">送信</button>
+
+		</div>
 	</div>
 
 	<script>
+
 		function showFormSection() {
 			// すべてのフォーム部分を隠す
 			document.getElementById('referralForm').style.display = 'none';
@@ -325,12 +251,12 @@
 						});
 					});
 			}
+
+
+
+			// Automatically set the current date
+			document.getElementById('introductionDate').innerText = new Date().toLocaleDateString();
 		}
-
-
-		// Automatically set the current date
-		document.getElementById('introductionDate').innerText = new Date().toLocaleDateString();
-
 	</script>
 </body>
 
