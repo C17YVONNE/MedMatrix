@@ -1,5 +1,6 @@
 package com.emrsys.medmatrix.controller;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ import com.emrsys.medmatrix.object.ReferralDto;
 import com.emrsys.medmatrix.service.DocumentService;
 import com.emrsys.medmatrix.service.HospitalInfoService;
 import com.emrsys.medmatrix.service.PatientInfoService;
+import com.emrsys.medmatrix.service.UserLoginService;
+import com.emrsys.medmatrix.util.MedConst;
+import com.emrsys.medmatrix.util.UserInfoSession;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -35,13 +39,22 @@ public class DocumentController extends BasePageController {
 	@Autowired
 	private DocumentService documentService;
 
+	@Autowired
+	UserLoginService userLoginService;
+
 	@GetMapping("/documentForm")
 	public ModelAndView showDocumentForm(@RequestParam("patientId") String patientId, HttpSession session,
 			Model model) {
+		// 从 session 获取 doctorId
+		UserInfoSession userInfoSession = (UserInfoSession) session.getAttribute("userInfoSession");
+		if (userInfoSession == null || userInfoSession.getDoctorId() < MedConst.DOCTORID_START_FROM) {
+			throw new IllegalArgumentException("Invalid doctorId");
+		}
 
 		PatientDto patientdto = patientInfoService.findPatientInfoByPatientId(patientId); // 通过ID获取患者信息
 		if (patientdto != null) {
 			model.addAttribute("patient", patientdto);
+			System.out.println(patientdto);
 		} else {
 			model.addAttribute("errorMessage", "患者情報が見つかりませんでした。");
 			return createMav("searchPatientInfo", session); // 如果患者信息未找到，则返回搜索页面
@@ -49,6 +62,16 @@ public class DocumentController extends BasePageController {
 
 		List<HospitalDto> hospitals = hospitalInfoService.getAllHospitals();
 		model.addAttribute("hospitals", hospitals);
+
+		ClinicalFindingsDto clinicalFindingsDto = new ClinicalFindingsDto();
+
+		model.addAttribute("clinicalFindingsDto", clinicalFindingsDto);
+
+		// 确保 doctorId 正确传递到前端
+		model.addAttribute("userInfoSession", userInfoSession);
+		
+		model.addAttribute("patient", patientdto);
+		System.out.println(patientdto);
 		return createMav("documentForm", session);
 	}
 
@@ -59,16 +82,30 @@ public class DocumentController extends BasePageController {
 	}
 
 	@PostMapping("/saveReferral")
-	public String saveReferral(@ModelAttribute ReferralDto referralDto, Model model) {
+	public ModelAndView saveReferral(@ModelAttribute ReferralDto referralDto, HttpSession session, Model model) {
 		documentService.saveReferral(referralDto);
 		model.addAttribute("successMessage", "紹介状が正常に保存されました。");
-		return "documentForm";
+		return createMav("documentForm", session);
 	}
 
 	@PostMapping("/saveClinicalFindings")
-	public String saveClinicalFindings(@ModelAttribute ClinicalFindingsDto clinicalFindingsDto, Model model) {
-		documentService.saveClinicalFindings(clinicalFindingsDto);
+	public ModelAndView saveClinicalFindings(@ModelAttribute @RequestParam("patientId") String patientId,
+			@RequestParam("doctorId") int doctorId,
+			@RequestParam("consultationDate") Date consultationDate,
+			@RequestParam("subjective") String subjective,
+			@RequestParam("objective") String objective,
+			@RequestParam("assessment") String assessment,
+			@RequestParam("plan") String plan,
+			HttpSession session, Model model) {
+		if (doctorId < MedConst.DOCTORID_START_FROM) {
+			throw new IllegalArgumentException("Invalid doctorId");
+		}
+
+		documentService.saveClinicalFindings(patientId, doctorId, consultationDate, subjective, objective, assessment,
+				plan);
+		UserInfoSession userInfoSession = userLoginService.getLoginSession(doctorId);
+		session.setAttribute("userInfoSession", userInfoSession);
 		model.addAttribute("successMessage", "診療所見が正常に保存されました。");
-		return "documentForm";
+		return createMav("documentForm", session);
 	}
 }

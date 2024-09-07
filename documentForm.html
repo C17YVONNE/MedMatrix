@@ -54,8 +54,7 @@
 
 						<!-- Right section for Introducing Medical Institution -->
 						<td style="vertical-align: top;">
-							<p>紹介日: <span
-									th:text="${#dates.format(new java.util.Date(), 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+							<p>紹介日: <span th:text="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}"></span></p>
 							<p>紹介元医療機関: <span th:text="${userInfoSession.hospitalName}"></span></p>
 							<p>医師氏名: <span th:text="${userInfoSession.name}"></span></p>
 							<p>所在地: 〒<span th:text="${userInfoSession.postcode}+${userInfoSession.address}"></span></p>
@@ -127,92 +126,102 @@
 		</div>
 
 		<!-- 診療所見のフォーム部分 -->
+
 		<div id="clinicalFindingsForm" class="form-section" style="display:none;">
-			<h2>診療所見</h2>
-			<!-- ここに診療所見フォームのフィールドを追加 -->
-			<div class="container">
-				<div class="title">診療所見</div>
+			<form th:action="@{/saveClinicalFindings}" th:object="${clinicalFindingsDto}" method="post">
 
-				<table class="header-section">
-					<tr> <!-- Left section for Referred Medical Institution -->
-						<td style="vertical-align: top; padding-right: 20px;">
-							<label for="clinicalHospitalSelect">紹介先医療機関:</label>
-							<select id="clinicalHospitalSelect" name="hospital" onchange="loadDepartments('clinical')">
-								<!-- Populate this dropdown with hospital names from your database -->
-								<option value="">--選択してください--</option>
-								<th:block th:each="hospital : ${hospitals}">
-									<option th:value="${hospital.hospitalId}" th:text="${hospital.hospitalName}">
-									</option>
-								</th:block>
-							</select>
-							<br>
-							<label for="clinicalDepartmentSelect">診療科:</label>
-							<select id="clinicalDepartmentSelect" name="department">
-								<!-- Populate this dropdown with department names based on the selected hospital -->
-								<option value="">--選択してください--</option>
-							</select>
-							<br>
-							<label for="clinicalDoctorName">担当医師名:</label>
-							<input type="text" id="clinicalDoctorName" name="doctorName" value="[担当医師名]">
-						</td>
+				<h2>診療所見</h2>
+				<!-- ここに診療所見フォームのフィールドを追加 -->
+				<div class="container">
+					<div class="title">診療所見</div>
 
-						<!-- Right section for Introducing Medical Institution -->
-						<td style="vertical-align: top;">
-							<p>紹介日: <span
-									th:text="${#dates.format(new java.util.Date(), 'yyyy-MM-dd HH:mm:ss')}"></span></p>
-							<p>紹介元医療機関: <span th:text="${userInfoSession.hospitalName}"></span></p>
-							<p>医師氏名: <span th:text="${userInfoSession.name}"></span></p>
-							<p>所在地: 〒<span th:text="${userInfoSession.postcode}+	${userInfoSession.address}"></span></p>
-							<p>電話番号: <span th:text="${userInfoSession.number}"></span></p>
-						</td>
-					</tr>
-				</table>
+					<table class="header-section">
+						<tr> <!-- Left section for Referred Medical Institution -->
+							<td style="vertical-align: top; padding-right: 20px;">
+								<label for="clinicalHospitalSelect">紹介先医療機関:</label>
+								<select id="clinicalHospitalSelect" name="hospital"
+									onchange="loadDepartments('clinical')">
+									<!-- Populate this dropdown with hospital names from your database -->
+									<option value="">--選択してください--</option>
+									<th:block th:each="hospital : ${hospitals}">
+										<option th:value="${hospital.hospitalId}" th:text="${hospital.hospitalName}">
+										</option>
+									</th:block>
+								</select>
+								<br>
+								<label for="clinicalDepartmentSelect">診療科:</label>
+								<select id="clinicalDepartmentSelect" name="department">
+									<!-- Populate this dropdown with department names based on the selected hospital -->
+									<option value="">--選択してください--</option>
+								</select>
+								<br>
+								<label for="clinicalDoctorName">担当医師名:</label>
+								<input type="text" id="clinicalDoctorName" name="doctorName" value="[担当医師名]">
+							</td>
 
-				<table>
-					<tr>
-						<td>患者氏名</td>
-						<td colspan="2"><input type="text" class="input-box" th:value="${patient.name}"></td>
-						<td>性別</td>
-						<td><input type="text" class="input-box" th:value="${patient.gender}"></td>
-					</tr>
-					<tr>
-						<td>住所</td>
-						<td colspan="4"><input type="text" class="input-box" th:value="${patient.address}"></td>
-					</tr>
-					<tr>
-						<td>電話番号</td>
-						<td colspan="2"><input type="text" class="input-box" th:value="${patient.contactNum}"></td>
-						<td>生年月日</td>
-						<td><input type="text" class="input-box" th:value="${patient.dateOfBirth}"></td>
-					</tr>
-					<tr>
-						<td>所見日</td>
-						<td colspan="4"><input type="date" class="input-box"
-								th:value="${#dates.format(new java.util.Date())}"></td>
-					</tr>
-					<tr>
-						<td>Subjective</td>
-						<td colspan="4"><textarea class="large-input-box"></textarea></td>
-					</tr>
-					<tr>
-						<td>Objective</td>
-						<td colspan="4"><textarea class="large-input-box"></textarea></td>
-					</tr>
-					<tr>
-						<td>Assessment</td>
-						<td colspan="4"><textarea class="large-input-box"></textarea></td>
-					</tr>
-					<tr>
-						<td>Plan</td>
-						<td colspan="4"><textarea class="large-input-box"></textarea></td>
-					</tr>
-				</table>
+							<!-- Right section for Introducing Medical Institution -->
+							<td style="vertical-align: top;">
+								<p>紹介日: <span th:text="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}"></span>
+								</p>
+								<p>紹介元医療機関: <span th:text="${userInfoSession.hospitalName}"></span></p>
+								<p>医師氏名: <span th:text="${userInfoSession.name}"></span></p>
+								<p>所在地: 〒<span th:text="${userInfoSession.postcode}+	${userInfoSession.address}"></span>
+								</p>
+								<p>電話番号: <span th:text="${userInfoSession.number}"></span></p>
+							</td>
+						</tr>
+					</table>
 
-			</div>
-			<button type="submit">診療所見を保存</button>
+					<table>
+						<tr>
+							<td>患者氏名</td>
+							<td colspan="2"><input type="text" class="input-box" th:value="${patient.name}"></td>
+							<td>性別</td>
+							<td><input type="text" class="input-box" th:value="${patient.gender}"></td>
+						</tr>
+						<tr>
+							<td>住所</td>
+							<td colspan="4"><input type="text" class="input-box" th:value="${patient.address}"></td>
+						</tr>
+						<tr>
+							<td>電話番号</td>
+							<td colspan="2"><input type="text" class="input-box" th:value="${patient.contactNum}"></td>
+							<td>生年月日</td>
+							<td><input type="text" class="input-box" th:value="${patient.dateOfBirth}"></td>
+						</tr>
+						<tr>
+							<td>所見日</td>
+							<td colspan="4"><input type="date" class="input-box"
+									th:value="${#dates.format(new java.util.Date())}" name="consultationDate"></td>
+						</tr>
+						<tr>
+							<td>Subjective</td>
+							<td colspan="4" name="subjective"><textarea class="large-input-box"></textarea></td>
+						</tr>
+						<tr>
+							<td>Objective</td>
+							<td colspan="4" name="objective"><textarea class="large-input-box"></textarea></td>
+						</tr>
+						<tr>
+							<td>Assessment</td>
+							<td colspan="4" name="assessment"><textarea class="large-input-box"></textarea></td>
+						</tr>
+						<tr>
+							<td>Plan</td>
+							<td colspan="4" name="plan"><textarea class="large-input-box"></textarea></td>
+						</tr>
+					</table>
 
+				</div>
 
+				<input type="hidden" th:text="${patient.patientId}" name="patientId" />
+				<input type="hidden" th:text="${userInfoSession.doctorId}" name="doctorId" />
+
+				<button type="submit">診療所見を保存</button>
+
+			</form>
 		</div>
+
 	</div>
 
 	<script>
