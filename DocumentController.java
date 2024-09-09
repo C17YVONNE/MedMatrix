@@ -52,13 +52,12 @@ public class DocumentController extends BasePageController {
 		}
 
 		PatientDto patientdto = patientInfoService.findPatientInfoByPatientId(patientId); // 通过ID获取患者信息
-		if (patientdto != null) {
-			model.addAttribute("patient", patientdto);
-			System.out.println(patientdto);
-		} else {
-			model.addAttribute("errorMessage", "患者情報が見つかりませんでした。");
-			return createMav("searchPatientInfo", session); // 如果患者信息未找到，则返回搜索页面
+		if (patientdto == null) {
+			model.addAttribute("errorMessage", "患者情報が見つかりません。");
+			return createMav("searchPatientId", session);
 		}
+		model.addAttribute("patient", patientdto);
+		System.out.println(patientdto.getName());
 
 		List<HospitalDto> hospitals = hospitalInfoService.getAllHospitals();
 		model.addAttribute("hospitals", hospitals);
@@ -69,9 +68,7 @@ public class DocumentController extends BasePageController {
 
 		// 确保 doctorId 正确传递到前端
 		model.addAttribute("userInfoSession", userInfoSession);
-		
-		model.addAttribute("patient", patientdto);
-		System.out.println(patientdto);
+
 		return createMav("documentForm", session);
 	}
 
@@ -80,10 +77,30 @@ public class DocumentController extends BasePageController {
 	public List<DepartmentDto> getDepartmentsByHospital(@RequestParam int hospitalId) {
 		return hospitalInfoService.getAllDepartsByHospitalId(hospitalId);
 	}
+	
+	@GetMapping("/docSaveSuccess")
+	public String showSaveSuccessPage() {
+	    return "docSaveSuccess";
+	}
+
 
 	@PostMapping("/saveReferral")
 	public ModelAndView saveReferral(@ModelAttribute ReferralDto referralDto, HttpSession session, Model model) {
 		documentService.saveReferral(referralDto);
+
+		// 重新获取 patient 对象并传递给视图
+		PatientDto patientdto = patientInfoService.findPatientInfoByPatientId(referralDto.getPatientId());
+		if (patientdto == null) {
+			model.addAttribute("errorMessage", "患者情報が見つかりません。");
+			return createMav("searchPatientId", session);
+		}
+		model.addAttribute("patient", patientdto);
+
+		// 重新设置 session 信息
+		UserInfoSession userInfoSession = userLoginService.getLoginSession(referralDto.getDoctorId());
+		session.setAttribute("userInfoSession", userInfoSession);
+
+		// 显示成功信息
 		model.addAttribute("successMessage", "紹介状が正常に保存されました。");
 		return createMav("documentForm", session);
 	}
@@ -103,9 +120,21 @@ public class DocumentController extends BasePageController {
 
 		documentService.saveClinicalFindings(patientId, doctorId, consultationDate, subjective, objective, assessment,
 				plan);
+
+		// 重新获取 patient 对象并传递给视图
+		PatientDto patientdto = patientInfoService.findPatientInfoByPatientId(patientId);
+		if (patientdto == null) {
+			model.addAttribute("errorMessage", "患者情報が見つかりません。");
+			return createMav("searchPatientId", session);
+		}
+		model.addAttribute("patient", patientdto);
+
+		// 重新设置 session 信息
 		UserInfoSession userInfoSession = userLoginService.getLoginSession(doctorId);
 		session.setAttribute("userInfoSession", userInfoSession);
+
+		// 显示成功信息
 		model.addAttribute("successMessage", "診療所見が正常に保存されました。");
-		return createMav("documentForm", session);
+	    return createMav("docSaveSuccess", session);
 	}
 }
