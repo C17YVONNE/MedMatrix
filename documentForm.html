@@ -10,223 +10,232 @@
 
 <body>
 	<div class="container">
-		<h1>文書作成フォーム</h1>
-		<p>患者名: <span th:text="${patient.name}">[患者名]</span></p>
-		<p>患者ID: <span th:text="${patient.patientId}">[患者ID]</span></p>
-		<div>
-			<label for="documentType">文書タイプ:</label>
-			<select id="documentType" name="documentType" class="form-select" onchange="showFormSection()">
-				<option value="">-- 文書を選択してください --</option>
-				<option value="referral">紹介状 (Referral letter)</option>
-				<option value="clinicalFindings">診療所見 (Clinical findings)</option>
-			</select>
-		</div>
-		<!-- 紹介状のフォーム部分 -->
-		<div id="referralForm" class="form-section" style="display:none;">
-			<h2>紹介状</h2>
-			<!-- ここに紹介状フォームのフィールドを追加 -->
-			<div class="container">
-				<div class="title">診療情報提供書（患者紹介）</div>
-
-				<table class="header-section">
-					<tr>
-						<!-- Left section for Referred Medical Institution -->
-						<td style="vertical-align: top; padding-right: 20px;">
-							<label for="referralHospitalSelect">紹介先医療機関:</label>
-							<select id="referralHospitalSelect" name="hospital" onchange="loadDepartments('referral')">
-								<!-- Populate this dropdown with hospital names from your database -->
-								<option value="">--選択してください--</option>
-								<th:block th:each="hospital : ${hospitals}">
-									<option th:value="${hospital.hospitalId}" th:text="${hospital.hospitalName}">
-									</option>
-								</th:block>
-							</select>
-							<br>
-							<label for="referralDepartmentSelect">診療科:</label>
-							<select id="referralDepartmentSelect" name="department">
-								<!-- Populate this dropdown with department names based on the selected hospital -->
-								<option value="">--選択してください--</option>
-							</select>
-							<br>
-							<label for="	referralDoctorName">担当医師名:</label>
-							<input type="text" id="referralDoctorName" name="doctorName" value="[担当医師名]">
-						</td>
-
-						<!-- Right section for Introducing Medical Institution -->
-						<td style="vertical-align: top;">
-							<p>紹介日: <span th:text="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}"></span></p>
-							<p>紹介元医療機関: <span th:text="${userInfoSession.hospitalName}"></span></p>
-							<p>医師氏名: <span th:text="${userInfoSession.name}"></span></p>
-							<p>所在地: 〒<span th:text="${userInfoSession.postcode}+${userInfoSession.address}"></span></p>
-							<p>電話番号: <span th:text="${userInfoSession.number}"></span></p>
-						</td>
-					</tr>
-				</table>
-
-				<table>
-					<tr>
-						<td>患者氏名</td>
-						<td colspan="2"><input type="text" class="input-box" th:value="${patient.name}"></td>
-						<td>性別</td>
-						<td><input type="text" class="input-box" th:value="${patient.gender}"></td>
-					</tr>
-					<tr>
-						<td>住所</td>
-						<td colspan="4"><input type="text" class="input-box" th:value="${patient.address}"></td>
-					</tr>
-					<tr>
-						<td>電話番号</td>
-						<td colspan="2"><input type="text" class="input-box" th:value="${patient.contactNum}"></td>
-						<td>生年月日</td>
-						<td><input type="text" class="input-box" th:value="${patient.dateOfBirth}"></td>
-					</tr>
-					<tr>
-						<td>傷病名</td>
-						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
-					</tr>
-					<tr>
-						<td>紹介目的</td>
-						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
-					</tr>
-					<tr>
-						<td>既往歴</td>
-						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
-					</tr>
-					<tr>
-						<td>家族歴</td>
-						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
-					</tr>
-					<tr>
-						<td>現疾患（診断内容）</td>
-						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
-					</tr>
-					<tr>
-						<td>治療経過</td>
-						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
-					</tr>
-					<tr>
-						<td>現在の処方</td>
-						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
-					</tr>
-					<tr>
-						<td>身体所見</td>
-						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
-					</tr>
-					<tr>
-						<td>生活習慣</td>
-						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
-					</tr>
-					<tr>
-						<td>連絡(留意)事項</td>
-						<td colspan="4"><input type="text" class="input-box large-input-box"></td>
-					</tr>
-				</table>
+		<div id="formContainer">
+			<h1>文書作成フォーム</h1>
+			<p>患者名: <span th:text="${patient.name}">[患者名]</span></p>
+			<p>患者ID: <span th:text="${patient.patientId}">[患者ID]</span></p>
+			<div>
+				<label for="documentType">文書タイプ:</label>
+				<select id="documentType" name="documentType" class="form-select" onchange="showFormSection()">
+					<option value="">-- 文書を選択してください --</option>
+					<option value="referral">紹介状 (Referral letter)</option>
+					<option value="clinicalFindings">診療所見 (Clinical findings)</option>
+				</select>
 			</div>
-			<button type="submit">紹介状を保存</button>
-		</div>
+			<!-- 紹介状のフォーム部分 -->
+			<div id="referralForm" class="form-section" style="display:none;">
+				<h2>紹介状</h2>
+				<!-- ここに紹介状フォームのフィールドを追加 -->
+				<div class="container">
+					<div class="title">診療情報提供書（患者紹介）</div>
 
-		<!-- 診療所見のフォーム部分 -->
-
-
-		<div id="clinicalFindingsForm" class="form-section" style="display:none;">
-
-
-			<h2>診療所見</h2>
-			<!-- ここに診療所見フォームのフィールドを追加 -->
-			<div class="container">
-				<div class="title">診療所見</div>
-
-				<table class="header-section">
-					<tr> <!-- Left section for Referred Medical Institution -->
-						<td style="vertical-align: top; padding-right: 20px;">
-							<label for="clinicalHospitalSelect">紹介先医療機関:</label>
-							<select id="clinicalHospitalSelect" name="hospital" onchange="loadDepartments('clinical')">
-								<!-- Populate this dropdown with hospital names from your database -->
-								<option value="">--選択してください--</option>
-								<th:block th:each="hospital : ${hospitals}">
-									<option th:value="${hospital.hospitalId}" th:text="${hospital.hospitalName}">
-									</option>
-								</th:block>
-							</select>
-							<br>
-							<label for="clinicalDepartmentSelect">診療科:</label>
-							<select id="clinicalDepartmentSelect" name="department">
-								<!-- Populate this dropdown with department names based on the selected hospital -->
-								<option value="">--選択してください--</option>
-							</select>
-							<br>
-							<label for="clinicalDoctorName">担当医師名:</label>
-							<input type="text" id="clinicalDoctorName" name="doctorName" value="[担当医師名]">
-						</td>
-
-						<!-- Right section for Introducing Medical Institution -->
-						<td style="vertical-align: top;">
-							<p>紹介日: <span th:text="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}"></span>
-							</p>
-							<p>紹介元医療機関: <span th:text="${userInfoSession.hospitalName}"></span></p>
-							<p>医師氏名: <span th:text="${userInfoSession.name}"></span></p>
-							<p>所在地: 〒<span th:text="${userInfoSession.postcode}+	${userInfoSession.address}"></span>
-							</p>
-							<p>電話番号: <span th:text="${userInfoSession.number}"></span></p>
-						</td>
-					</tr>
-				</table>
-
-				<table>
-					<tr>
-						<td>患者氏名</td>
-						<td colspan="2"><input type="text" class="input-box" th:value="${patient.name}"></td>
-						<td>性別</td>
-						<td><input type="text" class="input-box" th:value="${patient.gender}"></td>
-					</tr>
-					<tr>
-						<td>住所</td>
-						<td colspan="4"><input type="text" class="input-box" th:value="${patient.address}"></td>
-					</tr>
-					<tr>
-						<td>電話番号</td>
-						<td colspan="2"><input type="text" class="input-box" th:value="${patient.contactNum}"></td>
-						<td>生年月日</td>
-						<td><input type="text" class="input-box" th:value="${patient.dateOfBirth}"></td>
-					</tr>
-
-					<form th:action="@{/saveClinicalFindings}" th:object="${clinicalFindingsDto}" method="post">
+					<table class="header-section">
 						<tr>
-							<td>所見日</td>
-							<td colspan="4"><input type="date" class="input-box"
-									th:value="${#dates.format(new java.util.Date())}" id="consultationDate"
-									name="consultationDate"></td>
-						</tr>
-						<tr>
-							<td>主訴</td>
-							<td colspan="4"><input class="large-input-box" id="subjective" name="subjective"></input>
+							<!-- Left section for Referred Medical Institution -->
+							<td style="vertical-align: top; padding-right: 20px;">
+								<label for="referralHospitalSelect">紹介先医療機関:</label>
+								<select id="referralHospitalSelect" name="hospital"
+									onchange="loadDepartments('referral')">
+									<!-- Populate this dropdown with hospital names from your database -->
+									<option value="">--選択してください--</option>
+									<th:block th:each="hospital : ${hospitals}">
+										<option th:value="${hospital.hospitalId}" th:text="${hospital.hospitalName}">
+										</option>
+									</th:block>
+								</select>
+								<br>
+								<label for="referralDepartmentSelect">診療科:</label>
+								<select id="referralDepartmentSelect" name="department">
+									<!-- Populate this dropdown with department names based on the selected hospital -->
+									<option value="">--選択してください--</option>
+								</select>
+								<br>
+								<label for="	referralDoctorName">担当医師名:</label>
+								<input type="text" id="referralDoctorName" name="doctorName" value="[担当医師名]">
+							</td>
+
+							<!-- Right section for Introducing Medical Institution -->
+							<td style="vertical-align: top;">
+								<p>紹介日: <span th:text="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}"></span></p>
+								<p>紹介元医療機関: <span th:text="${userInfoSession.hospitalName}"></span></p>
+								<p>医師氏名: <span th:text="${userInfoSession.name}"></span></p>
+								<p>所在地: 〒<span th:text="${userInfoSession.postcode}+${userInfoSession.address}"></span>
+								</p>
+								<p>電話番号: <span th:text="${userInfoSession.number}"></span></p>
 							</td>
 						</tr>
-						<tr>
-							<td>客観的所見</td>
-							<td colspan="4"><input class="large-input-box" id="objective" name="objective"></input></td>
-						</tr>
-						<tr>
-							<td>評価</td>
-							<td colspan="4"><input class="large-input-box" id="assessment" name="assessment"></input>
-							</td>
-						</tr>
-						<tr>
-							<td>治療計画</td>
-							<td colspan="4"><input class="large-input-box" id="plan" name="plan"></input></td>
-						</tr>
-				</table>
+					</table>
 
+					<table>
+						<tr>
+							<td>患者氏名</td>
+							<td colspan="2"><input type="text" class="input-box" th:value="${patient.name}"></td>
+							<td>性別</td>
+							<td><input type="text" class="input-box" th:value="${patient.gender}"></td>
+						</tr>
+						<tr>
+							<td>住所</td>
+							<td colspan="4"><input type="text" class="input-box" th:value="${patient.address}"></td>
+						</tr>
+						<tr>
+							<td>電話番号</td>
+							<td colspan="2"><input type="text" class="input-box" th:value="${patient.contactNum}"></td>
+							<td>生年月日</td>
+							<td><input type="text" class="input-box" th:value="${patient.dateOfBirth}"></td>
+						</tr>
+						<tr>
+							<td>傷病名</td>
+							<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+						</tr>
+						<tr>
+							<td>紹介目的</td>
+							<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+						</tr>
+						<tr>
+							<td>既往歴</td>
+							<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+						</tr>
+						<tr>
+							<td>家族歴</td>
+							<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+						</tr>
+						<tr>
+							<td>現疾患（診断内容）</td>
+							<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+						</tr>
+						<tr>
+							<td>治療経過</td>
+							<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+						</tr>
+						<tr>
+							<td>現在の処方</td>
+							<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+						</tr>
+						<tr>
+							<td>身体所見</td>
+							<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+						</tr>
+						<tr>
+							<td>生活習慣</td>
+							<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+						</tr>
+						<tr>
+							<td>連絡(留意)事項</td>
+							<td colspan="4"><input type="text" class="input-box large-input-box"></td>
+						</tr>
+					</table>
+				</div>
+				<button type="submit">紹介状を保存</button>
 			</div>
 
-			<input type="hidden" th:value="${patient.patientId}" name="patientId" />
-			<input type="hidden" th:value="${userInfoSession.doctorId}" name="doctorId" />
+			<!-- 診療所見のフォーム部分 -->
 
-			<button type="submit">診療所見を保存</button>
 
+			<div id="clinicalFindingsForm" class="form-section" style="display:none;">
+
+
+				<h2>診療所見</h2>
+				<!-- ここに診療所見フォームのフィールドを追加 -->
+				<div class="container">
+					<div class="title">診療所見</div>
+
+					<table class="header-section">
+						<tr> <!-- Left section for Referred Medical Institution -->
+							<td style="vertical-align: top; padding-right: 20px;">
+								<label for="clinicalHospitalSelect">紹介先医療機関:</label>
+								<select id="clinicalHospitalSelect" name="hospital"
+									onchange="loadDepartments('clinical')">
+									<!-- Populate this dropdown with hospital names from your database -->
+									<option value="">--選択してください--</option>
+									<th:block th:each="hospital : ${hospitals}">
+										<option th:value="${hospital.hospitalId}" th:text="${hospital.hospitalName}">
+										</option>
+									</th:block>
+								</select>
+								<br>
+								<label for="clinicalDepartmentSelect">診療科:</label>
+								<select id="clinicalDepartmentSelect" name="department">
+									<!-- Populate this dropdown with department names based on the selected hospital -->
+									<option value="">--選択してください--</option>
+								</select>
+								<br>
+								<label for="clinicalDoctorName">担当医師名:</label>
+								<input type="text" id="clinicalDoctorName" name="doctorName" value="[担当医師名]">
+							</td>
+
+							<!-- Right section for Introducing Medical Institution -->
+							<td style="vertical-align: top;">
+								<p>紹介日: <span th:text="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}"></span>
+								</p>
+								<p>紹介元医療機関: <span th:text="${userInfoSession.hospitalName}"></span></p>
+								<p>医師氏名: <span th:text="${userInfoSession.name}"></span></p>
+								<p>所在地: 〒<span th:text="${userInfoSession.postcode}+	${userInfoSession.address}"></span>
+								</p>
+								<p>電話番号: <span th:text="${userInfoSession.number}"></span></p>
+							</td>
+						</tr>
+					</table>
+
+					<table>
+						<tr>
+							<td>患者氏名</td>
+							<td colspan="2"><input type="text" class="input-box" th:value="${patient.name}"></td>
+							<td>性別</td>
+							<td><input type="text" class="input-box" th:value="${patient.gender}"></td>
+						</tr>
+						<tr>
+							<td>住所</td>
+							<td colspan="4"><input type="text" class="input-box" th:value="${patient.address}"></td>
+						</tr>
+						<tr>
+							<td>電話番号</td>
+							<td colspan="2"><input type="text" class="input-box" th:value="${patient.contactNum}"></td>
+							<td>生年月日</td>
+							<td><input type="text" class="input-box" th:value="${patient.dateOfBirth}"></td>
+						</tr>
+
+						<form th:action="@{/saveClinicalFindings}" th:object="${clinicalFindingsDto}" method="post">
+							<tr>
+								<td>所見日</td>
+								<td colspan="4"><input type="date" class="input-box"
+										th:value="${#dates.format(new java.util.Date())}" id="consultationDate"
+										name="consultationDate"></td>
+							</tr>
+							<tr>
+								<td>主訴</td>
+								<td colspan="4"><input class="large-input-box" id="subjective"
+										name="subjective"></input>
+								</td>
+							</tr>
+							<tr>
+								<td>客観的所見</td>
+								<td colspan="4"><input class="large-input-box" id="objective" name="objective"></input>
+								</td>
+							</tr>
+							<tr>
+								<td>評価</td>
+								<td colspan="4"><input class="large-input-box" id="assessment"
+										name="assessment"></input>
+								</td>
+							</tr>
+							<tr>
+								<td>治療計画</td>
+								<td colspan="4"><input class="large-input-box" id="plan" name="plan"></input></td>
+							</tr>
+					</table>
+
+				</div>
+
+				<input type="hidden" th:value="${patient.patientId}" name="patientId" />
+				<input type="hidden" th:value="${userInfoSession.doctorId}" name="doctorId" />
+
+				<button type="button" id="confirmBtn" onclick="confirmForm()">確認画面へ</button>
+				<button type="button" id="backBtn" onclick="goBack()" style="display:none;">編集画面へ戻る</button>
+				<button type="submit" id="submitBtn" style="display:none;">診療所見を保存</button>
+
+			</div>
+			</form>
 		</div>
-		</form>
-
 	</div>
 
 	<script>
@@ -270,6 +279,40 @@
 
 			// Automatically set the current date
 			document.getElementById('introductionDate').innerText = new Date().toLocaleDateString();
+		}
+
+		function confirmForm() {
+			// 使所有表單字段變為只讀
+			document.querySelectorAll('#formContainer input').forEach(function (input) {
+				input.setAttribute('readonly', true);
+			});
+
+			// 找到所有select欄位並設置為disabled（禁用）
+			document.querySelectorAll('#formContainer select').forEach(function (select) {
+				select.disabled = true;  // 禁用下拉選單
+			});
+
+			// 隱藏確認按鈕，顯示返回和提交按鈕
+			document.getElementById('confirmBtn').style.display = 'none';
+			document.getElementById('backBtn').style.display = 'inline';
+			document.getElementById('submitBtn').style.display = 'inline';
+		}
+
+		function goBack() {
+			// 恢復字段的可編輯狀態
+			document.querySelectorAll('#formContainer input').forEach(function (input) {
+				input.removeAttribute('readonly');
+			});
+
+			// 恢復所有select欄位為可選狀態
+			document.querySelectorAll('#formContainer select').forEach(function (select) {
+				select.disabled = false;  // 重新啟用下拉選單
+			});
+
+			// 顯示確認按鈕，隱藏返回和提交按鈕
+			document.getElementById('confirmBtn').style.display = 'inline';
+			document.getElementById('backBtn').style.display = 'none';
+			document.getElementById('submitBtn').style.display = 'none';
 		}
 
 	</script>
