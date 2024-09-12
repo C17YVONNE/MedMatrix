@@ -54,11 +54,12 @@ public class DocumentController extends BasePageController {
 		PatientDto patientdto = patientInfoService.findPatientInfoByPatientId(patientId); // 通过ID获取患者信息
 		if (patientdto == null) {
 			model.addAttribute("errorMessage", "患者情報が見つかりません。");
+			model.addAttribute("patients", new PatientDto()); // 初始化空对象
 			return createMav("searchPatientId", session);
 		}
 		model.addAttribute("patient", patientdto);
-		System.out.println(patientdto.getName());
 
+		// 把醫院列表加到模型中
 		List<HospitalDto> hospitals = hospitalInfoService.getAllHospitals();
 		model.addAttribute("hospitals", hospitals);
 
@@ -77,12 +78,11 @@ public class DocumentController extends BasePageController {
 	public List<DepartmentDto> getDepartmentsByHospital(@RequestParam int hospitalId) {
 		return hospitalInfoService.getAllDepartsByHospitalId(hospitalId);
 	}
-	
+
 	@GetMapping("/docSaveSuccess")
 	public String showSaveSuccessPage() {
-	    return "docSaveSuccess";
+		return "docSaveSuccess";
 	}
-
 
 	@PostMapping("/saveReferral")
 	public ModelAndView saveReferral(@ModelAttribute ReferralDto referralDto, HttpSession session, Model model) {
@@ -102,7 +102,7 @@ public class DocumentController extends BasePageController {
 
 		// 显示成功信息
 		model.addAttribute("successMessage", "紹介状が正常に保存されました。");
-		return createMav("documentForm", session);
+		return createMav("docSaveSuccess", session);
 	}
 
 	@PostMapping("/saveClinicalFindings")
@@ -135,6 +135,6 @@ public class DocumentController extends BasePageController {
 
 		// 显示成功信息
 		model.addAttribute("successMessage", "診療所見が正常に保存されました。");
-	    return createMav("docSaveSuccess", session);
+		return createMav("docSaveSuccess", session);
 	}
 }
