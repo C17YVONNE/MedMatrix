@@ -150,7 +150,9 @@
 
 				</div>
 
-				<button type="submit" id="submitBtn">紹介状を保存</button>
+				<button type="button" class="confirmBtn" onclick="confirmForm(event)">確認画面へ</button>
+				<button type="button" class="backBtn" onclick="goBack(event)" style="display:none;">編集画面へ戻る</button>
+				<button type="submit" class="submitBtn" style="display:none;">紹介状を保存</button>
 				</form>
 			</div>
 
@@ -260,8 +262,9 @@
 				<input type="hidden" th:value="${patient.patientId}" name="patientId" />
 				<input type="hidden" th:value="${userInfoSession.doctorId}" name="doctorId" />
 
-
-				<button type="submit" id="submitBtn">診療所見を保存</button>
+				<button type="button" class="confirmBtn" onclick="confirmForm(event)">確認画面へ</button>
+				<button type="button" class="backBtn" onclick="goBack(event)" style="display:none;">編集画面へ戻る</button>
+				<button type="submit" class="submitBtn" style="display:none;">診療所見を保存</button>
 
 			</div>
 			</form>
@@ -340,6 +343,46 @@
 				});
 		}
 	}
+
+	function confirmForm(event) {
+		var form = event.target.closest('.form-section'); // ボタンの属するフォームを取得
+
+		// すべての入力フィールドを読み取り専用にする
+		form.querySelectorAll('input').forEach(function (input) {
+			input.setAttribute('readonly', true);
+		});
+
+		// すべてのセレクトボックスを無効にする
+		form.querySelectorAll('select').forEach(function (select) {
+			select.disabled = true;
+		});
+
+		// ボタンの表示/非表示を切り替え
+		form.querySelector('.confirmBtn').style.display = 'none';
+		form.querySelector('.backBtn').style.display = 'inline';
+		form.querySelector('.submitBtn').style.display = 'inline';
+	}
+
+	function goBack(event) {
+		var form = event.target.closest('.form-section'); // ボタンの属するフォームを取得
+
+		// すべての入力フィールドを再び編集可能にする
+		form.querySelectorAll('input').forEach(function (input) {
+			input.removeAttribute('readonly');
+		});
+
+		// すべてのセレクトボックスを有効にする
+		form.querySelectorAll('select').forEach(function (select) {
+			select.disabled = false;
+		});
+
+		// ボタンの表示/非表示を切り替え
+		form.querySelector('.confirmBtn').style.display = 'inline';
+		form.querySelector('.backBtn').style.display = 'none';
+		form.querySelector('.submitBtn').style.display = 'none';
+	}
+
+
 
 
 </script>
