@@ -1,0 +1,154 @@
+@charset "UTF-8";
+
+/* 全局样式 */
+body {
+	font-family: 'Helvetica Neue', Arial, sans-serif;
+	background-color: #f4f4f9;
+	margin: 0;
+	padding: 0;
+	color: #333;
+}
+
+/* 容器样式 */
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 40px 20px;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 搜索容器样式 */
+.search-container {
+	margin-bottom: 30px;
+	max-width: 90%;
+	/* 控制内容宽度 */
+	margin: 0 auto;
+}
+
+/* 表单样式 */
+label {
+	font-weight: 600;
+	color: #555;
+	display: block;
+	margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="date"],
+select {
+	width: 60%;
+	/* 调整输入框和下拉框的宽度为60% */
+	padding: 10px;
+	margin-top: 5px;
+	margin-bottom: 20px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	background-color: #f9f9f9;
+	transition: border-color 0.3s, background-color 0.3s;
+	font-size: 14px;
+}
+
+.date-range-container {
+	display: flex;
+	/* 使用 flexbox 布局 */
+	gap: 20px;
+	/* 两个日期选择框之间的间距 */
+	align-items: center;
+	/* 让两个日期选择框垂直居中对齐 */
+}
+
+.date-range-container label {
+	width: auto;
+	margin-bottom: 0;
+}
+
+
+input[type="submit"],
+.btn-primary {
+	width: auto;
+	/* 调整按钮的宽度 */
+	padding: 10px 20px;
+	/* 更合适的按钮内边距 */
+	background-color: #007bff;
+	border: none;
+	color: white;
+	border-radius: 4px;
+	font-size: 16px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="submit"]:hover,
+.btn-primary:hover {
+	background-color: #0056b3;
+	box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+}
+
+/* 表格样式 */
+.table-container {
+	margin-top: 30px;
+	max-width: 90%;
+	/* 控制表格容器的宽度 */
+	margin: 0 auto;
+}
+
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	background-color: #fff;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.table th,
+.table td {
+	padding: 15px;
+	border: 1px solid #e9ecef;
+	text-align: left;
+	font-size: 14px;
+	color: #555;
+}
+
+.table th {
+	background-color: #007bff;
+	color: #fff;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-size: 13px;
+}
+
+.table tbody tr:nth-child(even) {
+	background-color: #f8f9fa;
+}
+
+.table tbody tr:hover {
+	background-color: #f1f1f1;
+	transition: background-color 0.2s ease;
+}
+
+/* 响应式样式 */
+@media (max-width: 768px) {
+	.container {
+		max-width: 100%;
+		padding: 20px;
+	}
+
+	.search-container,
+	.table-container {
+		max-width: 100%;
+	}
+
+	input[type="text"],
+	input[type="date"],
+	select {
+		width: 100%;
+		/* 在小屏幕上，输入框和下拉框占满100%的宽度 */
+	}
+
+	input[type="submit"],
+	.btn-primary {
+		width: 100%;
+		/* 小屏幕上按钮宽度为100% */
+	}
+}

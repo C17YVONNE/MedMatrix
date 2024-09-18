@@ -12,4 +12,6 @@ public class IntroStatusDto {
 	private String introFrom;
 	private String introTo;
 	private String status;
+	
+	private String patientName;
 }
