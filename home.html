@@ -15,39 +15,21 @@
 
 				<div class="search-container">
 					<form th:action="@{/home}" th:object="${intro_status}" method="get" class="form-control">
-						<div class="col-md-4">
-							<label for="patientId">患者ID</label>
-							<input type="text" id="patientId" name="patientId">
-							<div class="col-md-8">
-								<input type="submit" value="	患者ID検索">
-							</div>
-						</div>
-						<div class="col-md-4">
-							<label for="intro_status">状態</label>
-							<select id="status" name="status">
-								<option>作成中</option>
-								<option>確定</option>
-							</select>
-						</div>
 
-						<div class="col-md-4">
-							<label for="intro_from">紹介元</label>
-							<select id="intro_from" name="intro_from">
-								<option>sss</option>
-								<option>mmm</option>
-								<option>lll</option>
-							</select>
+						<div class="col-md-3">
+							<input type="text" id="patientId" name="patientId" placeholder="患者ID">
+							<input type="text" id="keyword" name="keyword" placeholder="キーワード［例:患者氏名、文書名、文書状態、紹介先］">
 						</div>
 
 						<div class="date-range-container">
 							<label for="startdate">日付:</label>
 							<input type="date" id="startdate" name="startdate"><span>~</span><input type="date"
 								id="enddate" name="enddate">
-						</div>
 
-						<div class="col-md-4">
-							<label for="keyword">キーワード</label>
-							<input type="text" id="keyword" name="keyword" placeholder="	患者氏名、文書IDなど">
+							<div th:if="${dateError}">
+								<p style="color: red;" th:text="${dateError}"></p>
+							</div>
+
 						</div>
 
 						<div class="col-md-3">

@@ -38,7 +38,7 @@ label {
 input[type="text"],
 input[type="date"],
 select {
-	width: 60%;
+	width: 20%;
 	/* 调整输入框和下拉框的宽度为60% */
 	padding: 10px;
 	margin-top: 5px;
@@ -70,6 +70,8 @@ input[type="submit"],
 	width: auto;
 	/* 调整按钮的宽度 */
 	padding: 10px 20px;
+	margin-top: 5px;
+	margin-bottom: 20px;
 	/* 更合适的按钮内边距 */
 	background-color: #007bff;
 	border: none;
@@ -116,6 +118,12 @@ input[type="submit"]:hover,
 	font-weight: bold;
 	text-transform: uppercase;
 	font-size: 13px;
+}
+
+tbody {
+	min-height: 300px;
+	/* 最小高度 */
+	overflow-y: auto;
 }
 
 .table tbody tr:nth-child(even) {

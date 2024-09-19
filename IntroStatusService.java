@@ -1,6 +1,6 @@
 package com.emrsys.medmatrix.service;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -30,8 +30,8 @@ public class IntroStatusService {
 	@Autowired
 	private PatientInfoRepository patientInfoRepository;
 
-	public List<IntroStatusDto> searchIntroStatus(String patientId, String status, String introFrom, Date startDate,
-			Date endDate, String keyword) {
+	public List<IntroStatusDto> searchIntroStatus(String patientId, LocalDate startDate,
+			LocalDate endDate, String keyword) {
 		// 使用Specification来动态生成查询条件
 		return introStatusRepository.findAll((root, query, criteriaBuilder) -> {
 			List<Predicate> predicates = new ArrayList<>();
@@ -39,16 +39,6 @@ public class IntroStatusService {
 			// 如果用户输入了患者ID
 			if (patientId != null && !patientId.isEmpty()) {
 				predicates.add(criteriaBuilder.equal(root.get("patientId"), patientId));
-			}
-
-			// 如果用户输入了状态
-			if (status != null && !status.isEmpty()) {
-				predicates.add(criteriaBuilder.equal(root.get("status"), status));
-			}
-
-			// 如果用户输入了介绍来源
-			if (introFrom != null && !introFrom.isEmpty()) {
-				predicates.add(criteriaBuilder.equal(root.get("introFrom"), introFrom));
 			}
 
 			// 如果用户选择了开始日期
@@ -65,7 +55,9 @@ public class IntroStatusService {
 			if (keyword != null && !keyword.isEmpty()) {
 				predicates.add(criteriaBuilder.or(
 						criteriaBuilder.like(root.get("patientId"), "%" + keyword + "%"),
-						criteriaBuilder.like(root.get("documentId").as(String.class), "%" + keyword + "%")));
+						criteriaBuilder.like(root.get("documentId").as(String.class), "%" + keyword + "%"),
+						criteriaBuilder.like(root.get("status"), "%" + keyword + "%"),
+						criteriaBuilder.like(root.get("introFrom"), "%" + keyword + "%")));
 			}
 
 			// 根据所有的条件生成查询

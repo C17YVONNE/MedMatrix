@@ -1,6 +1,6 @@
 package com.emrsys.medmatrix.controller;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,32 +29,47 @@ public class HomeController extends BasePageController {
 	private PatientInfoService patientInfoService;
 
 	@GetMapping("/home")
-	public ModelAndView searchDocuStatus(@RequestParam(value = "status") String status,
+	public ModelAndView searchDocuStatus(
 			@RequestParam(value = "patientId", required = false) String patientId,
-			@RequestParam(value = "intro_from", required = false) String introFrom,
-			@RequestParam(value = "startdate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-			@RequestParam(value = "enddate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+			@RequestParam(value = "startdate", required = false) @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate startDate,
+			@RequestParam(value = "enddate", required = false) @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate endDate,
 			@RequestParam(value = "keyword", required = false) String keyword,
 			HttpSession session,
 			Model model) {
+
+		LocalDate currentDate = LocalDate.now();
+
+		if (startDate != null && endDate == null) {
+			endDate = currentDate;
+		}
+
+		if (endDate != null && startDate == null) {
+			startDate = LocalDate.of(1900, 1, 1);
+		}
+
+		if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+			model.addAttribute("dateError", "開始日時は終了日時より後に設定できません。");
+			return createMav("home", session);
+		}
+
 		// 调用Service层进行数据库查询
-		List<IntroStatusDto> introStatusList = introStatusService.searchIntroStatus(patientId, status, introFrom,
-				startDate, endDate, keyword);
+		List<IntroStatusDto> introStatusList = introStatusService.searchIntroStatus(patientId, startDate, endDate,
+				keyword);
 
 		// 将查询结果添加到model中传递给前端页面
 		model.addAttribute("introStatusList", introStatusList);
 
 		return createMav("home", session);
 	}
-	
+
 	@GetMapping("/getPatientName")
 	@ResponseBody
 	public String getPatientName(@RequestParam("patientId") String patientId) {
-	    PatientDto patient = patientInfoService.findPatientInfoByPatientId(patientId);
-	    if (patient != null) {
-	        return patient.getName();
-	    } else {
-	        return "不明な患者"; // 返回一个默认的患者名
-	    }
+		PatientDto patient = patientInfoService.findPatientInfoByPatientId(patientId);
+		if (patient != null) {
+			return patient.getName();
+		} else {
+			return "不明な患者"; // 返回一个默认的患者名
+		}
 	}
 }
