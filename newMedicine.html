@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>新しい薬を追加</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+	<div class="container mt-5">
+		<h2>新しい薬を追加</h2>
+
+		<div class="alert alert-danger" th:if="${errorMessage}">
+			<p th:text="${errorMessage}"></p>
+		</div>
+		<div class="alert alert-success" th:if="${successMessage}">
+			<p th:text="${successMessage}"></p>
+		</div>
+
+		<form th:action="@{/saveMedicineInfo}" th:object="${medicine}" method="post" enctype="multipart/form-data">
+			<div class="form-group">
+				<label for="name">薬の名前</label>
+				<input type="text" class="form-control" id="name" th:field="*{name}" placeholder="薬の名前を入力してください"
+					required>
+			</div>
+			<div class="form-group">
+				<label for="picLink">写真をアップロード</label>
+				<input type="file" class="form-control-file" id="picLink" th:field="*{picLinkFile}" accept="image/*"
+					required>
+				<img id="imagePreview" src="" alt="Image Preview"
+					style="max-width: 200px; margin-top: 10px; display: none;">
+			</div>
+			<div class="form-group">
+				<label for="description">説明</label>
+				<textarea class="form-control" id="description" th:field="*{description}"
+					placeholder="薬の説明を入力してください"></textarea>
+			</div>
+			<div class="form-group">
+				<label for="price">価格</label>
+				<input type="number" step="0.01" class="form-control" id="price" th:field="*{price}"
+					placeholder="価格を入力してください" required>
+			</div>
+			<button type="submit" class="btn btn-primary">追加</button>
+		</form>
+	</div>
+
+	<script>
+		document.getElementById('picLink').addEventListener('change', function (event) {
+			const file = event.target.files[0];
+			const maxSizeInMB = 5; // Set your size limit here (5MB)
+			const maxSizeInBytes = maxSizeInMB * 1024 * 1024; // Convert MB to bytes
+
+			if (file && file.size > maxSizeInBytes) {
+				alert("ファイルサイズが大きすぎます。5MB以下のファイルをアップロードしてください。");
+				event.target.value = ''; // Clear the input
+				document.getElementById('imagePreview').style.display = 'none'; // Hide the image preview
+			} else if (file) {
+				const reader = new FileReader();
+				reader.onload = function (e) {
+					const preview = document.getElementById('imagePreview');
+					preview.src = e.target.result;
+					preview.style.display = 'block';
+				}
+				reader.readAsDataURL(file);
+			}
+		});
+	</script>
+</body>
+
+</html>
